@@ -1,11 +1,17 @@
+const e = require("express");
 const jokeModel = require("../models/jokes.model");
 
 module.exports.getAllJokes = async (req, res, next) => {
   const jobs = await jokeModel.find();
-  if (!jobs) {
+  if (jobs.length === 0) {
     res.status(200).json({
       success: false,
       message: "There are no jokes in the book. Better write some first.",
+    });
+  } else {
+    res.status(200).json({
+      success: true,
+      data: jobs,
     });
   }
 };
@@ -17,15 +23,26 @@ module.exports.getJoke = async (req, res, next) => {
       success: false,
       message: "Sorry, we did not find that joke",
     });
+  } else {
+    res.status(200).json({
+      success: true,
+      data: job,
+    });
   }
 };
 
 module.exports.createJoke = async (req, res, next) => {
+  console.log(req.body);
   const joke = await jokeModel.create(req.body);
   if (!joke) {
     res.status(200).json({
       success: false,
       message: "Sorry, we did not create that joke",
+    });
+  } else {
+    res.status(200).json({
+      success: true,
+      data: joke,
     });
   }
 };
@@ -67,7 +84,7 @@ module.exports.deleteJoke = async (req, res, next) => {
     }
     res.status(200).json({
       success: true,
-      data: {},
+      data: joke,
     });
   } catch (error) {
     res.status(500).json({

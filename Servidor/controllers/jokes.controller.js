@@ -32,6 +32,7 @@ module.exports.createJoke = async (req, res, next) => {
 
 module.exports.updateJoke = async (req, res, next) => {
   try {
+    req.body.updatedAt = new Date();
     const updatedJoke = await jokeModel.findByIdAndUpdate(
       req.params.id,
       req.body,
